@@ -1,7 +1,6 @@
 // Imports the "file system" and "inquirer" libraries
 const fs = require("fs");
 const inquirer = require("inquirer");
-const license = require("./assets/licenses/GNU-GPLv3");
 
 // Creates an array of questions to be used in the inquirer.prompt() method
 const questions = [
@@ -30,7 +29,7 @@ const questions = [
      name: "usageInstr"},
 
     {type: "input",
-     message: "Screenshot Link/Path (can be left blank):",
+     message: "Screenshot/Video Link (can be left blank):",
      name: "screenshotLink"},
 
     {type: "input",
@@ -49,7 +48,28 @@ const questions = [
 
 function tableOfContents(data) {
 
+    let tableString = "";
 
+    if (data.appLink.trim() != "") {
+
+        tableString = tableString + "* [Application Link](#application%20link)\n";
+    }
+
+    if (data.repoLink.trim() != "") {
+
+        tableString = tableString + "* [Repository Link](#repository%20link)\n";
+    }
+
+    tableString = tableString + "* [Description](#description)\n";
+
+    if (data.installInstr.trim() != "") {
+
+        tableString = tableString + "* [Installation](#installation)\n";
+    }
+
+    tableString = tableString + "* [Usage](#usage)\n* [Credits](#credits)\n* [License](#license)"
+
+    return tableString;
 }
 
 function hasLinks(appLink, repoLink) {
@@ -57,11 +77,11 @@ function hasLinks(appLink, repoLink) {
     let linkString = "";
 
     if (appLink.trim() != "") {
-        linkString = linkString + "\n\n## Application Link\n" + appLink;
+        linkString = linkString + "\n\n## Application Link\n\n" + appLink;
     }
 
     if (repoLink.trim() != "") {
-        linkString = linkString + "\n\n## Repository Link\n" + repoLink;
+        linkString = linkString + "\n\n## Repository Link\n\n" + repoLink;
     }
 
     return linkString + "\n";
@@ -79,7 +99,7 @@ function hasInstall(installInstr) {
 function hasScreenshot(screenshotLink) {
 
     if (screenshotLink.trim() != "") {
-        return `\n\n![Demo Screenshot](${screenshotLink})`;
+        return `\n\n![Demonstration](${screenshotLink})`;
     }
 
     return "";
@@ -88,7 +108,7 @@ function hasScreenshot(screenshotLink) {
 function hasThirdPartyAssets(thirdPartyAssets) {
 
     if (thirdPartyAssets.trim() != "") {
-        return "\n**Third-Party Assets:**\n" + thirdPartyAssets;
+        return "\n\n**Third-Party Assets:** " + thirdPartyAssets;
     }
 
     return "";
@@ -149,7 +169,7 @@ ${getLicense(licenseName)}`;
 // ========================================================================================================
 
     // This writes the file using the string constructed above
-    fs.writeFileSync("test.md", readmeString, err => err ? console.error(err) : console.log('Success!'));
+    fs.writeFileSync("README.md", readmeString, err => err ? console.error(err) : console.log('Success!'));
 }
 
 // This function is called immediately to start the app
