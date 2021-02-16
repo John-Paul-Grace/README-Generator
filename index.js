@@ -8,49 +8,118 @@ const questions = [
      message: "Project Name:",
      name: "projectName"},
 
+     {type: "input",
+     message: "Application Link (can be left blank):",
+     name: "appLink"},
+
+     {type: "input",
+     message: "Repository Link (can be left blank):",
+     name: "repoLink"},
+
     {type: "input",
      message: "Description:",
      name: "projectDesc"},
 
     {type: "input",
-     message: "Your Name:",
-     name: "userName"},
+     message: "Installation Instructions (can be left blank):",
+     name: "installInstr"},
 
     {type: "input",
-     message: "Repository Link:",
-     name: "repoLink"},
+     message: "Usage Instructions:",
+     name: "usageInstr"},
 
     {type: "input",
-     message: "Application Link:",
-     name: "appLink"}
+     message: "Screenshot Link/Path (can be left blank):",
+     name: "screenshotLink"},
+
+    {type: "input",
+     message: "Collaborators (including yourself):",
+     name: "collabNames"},
+
+    {type: "input",
+     message: "Third-Party Assets (can be left blank):",
+     name: "thirdPartyAssets"},
+
+    {type: "input",
+     message: "License:",
+     name: "licenseType"}
 ];
 
-// TODO: Create a function to write README file
-function writeToFile(data) {
+function hasLinks(appLink, repoLink) {
 
-    readmeString = 
-`# ${data.projectName}
+    let linkString = "";
 
-## Application Link
+    if (appLink.trim() != "") {
+        linkString = linkString + "\n\n## Application Link\n" + appLink;
+    }
 
-${data.appLink}
+    if (repoLink.trim() != "") {
+        linkString = linkString + "\n\n## Repository Link\n" + repoLink;
+    }
 
-## Repository Link
-
-${data.repoLink}
-
-## Description
-
-${data.projectDesc}
-
-### Creator
-
-${data.userName}`;
-
-    fs.writeFileSync("README.md", readmeString, err => err ? console.error(err) : console.log('Success!'));
+    return linkString + "\n";
 }
 
-// TODO: Create a function to initialize app
+function hasInstall(installInstr) {
+    
+    if (installInstr.trim() != "") {
+        return "\n\n## Installation\n" + installInstr;
+    }
+
+    return "";
+}
+
+function hasScreenshot(screenshotLink) {
+
+    if (screenshotLink.trim() != "") {
+        return `\n![Demo Screenshot](${screenshotLink})`;
+    }
+
+    return "";
+}
+
+function hasThirdPartyAssets(thirdPartyAssets) {
+
+    if (thirdPartyAssets.trim() != "") {
+        return "\n\nThird-Party Assets:\n" + thirdPartyAssets;
+    }
+
+    return "";
+}
+
+function writeToFile(data) {
+
+    // This deconstructs the data object
+    const {projectName, appLink, repoLink, projectDesc, installInstr,
+           usageInstr, screenshotLink, collabNames, thirdPartyAssets, licenseType} = data;
+
+// ========================================================================================================
+    /* This uses the data object to create a string of the contents of the file. For any
+       information that may be left blank by the user, */
+    readmeString = 
+`# ${projectName}${hasLinks(appLink, repoLink)}
+## Description
+
+${projectDesc}${hasInstall(installInstr)}
+
+## Usage
+
+${usageInstr}${hasScreenshot(screenshotLink)}
+
+## Credits
+
+Collaborators: ${collabNames}${hasThirdPartyAssets(thirdPartyAssets)}
+
+## License
+
+${licenseType}`;
+// ========================================================================================================
+
+    // This writes the file using the string constructed above
+    fs.writeFileSync("test.md", readmeString, err => err ? console.error(err) : console.log('Success!'));
+}
+
+// This function is called immediately to start the app
 function init() {
 
     console.log("Please enter the following information.");
@@ -60,8 +129,7 @@ function init() {
        object with a number of values in it equal to the number of questions. */
     inquirer.prompt(questions).then(response => {
 
-        console.log(response);
-
+        // This passes the object containing the user input into the writeToFile() method
         writeToFile(response);
     });
 }
