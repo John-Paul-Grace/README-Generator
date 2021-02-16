@@ -1,7 +1,7 @@
 // Imports the "file system" and "inquirer" libraries
 const fs = require("fs");
 const inquirer = require("inquirer");
-const license = require("./assets/licenses/GNU-GPLv3-License");
+const license = require("./assets/licenses/GNU-GPLv3");
 
 // Creates an array of questions to be used in the inquirer.prompt() method
 const questions = [
@@ -41,10 +41,16 @@ const questions = [
      message: "Third-Party Assets (can be left blank):",
      name: "thirdPartyAssets"},
 
-    {type: "input",
+    {type: "list",
      message: "License:",
-     name: "licenseType"}
+     choices: ["MIT License", "GNU GPLv3.0", "Unlicensed"],
+     name: "licenseName"}
 ];
+
+function tableOfContents(data) {
+
+
+}
 
 function hasLinks(appLink, repoLink) {
 
@@ -88,16 +94,33 @@ function hasThirdPartyAssets(thirdPartyAssets) {
     return "";
 }
 
-function tableOfContents(data) {
+function getLicense(licenseName) {
 
+    let licenseText = "";
 
+    switch (licenseName) {
+        case "MIT License":
+            console.log("For this license, you will need to add your full name and the current year in the readme.")
+            licenseText = require("./assets/licenses/MIT-License.js");
+            break;
+
+        case "GNU GPLv3.0":
+            licenseText = require("./assets/licenses/GNU-GPLv3.js");
+            break;
+
+        case "Unlicensed":
+            licenseText = require("./assets/licenses/Unlicense.js");
+            break;
+    }
+
+    return licenseText;
 }
 
 function writeToFile(data) {
 
     // This deconstructs the data object
     const {projectName, appLink, repoLink, projectDesc, installInstr,
-           usageInstr, screenshotLink, collabNames, thirdPartyAssets, licenseType} = data;
+           usageInstr, screenshotLink, collabNames, thirdPartyAssets, licenseName} = data;
 
 // ========================================================================================================
     /* This uses the data object to create a string of the contents of the file. For any
@@ -122,7 +145,7 @@ ${usageInstr}${hasScreenshot(screenshotLink)}
 
 ## License
 
-${licenseType}`;
+${getLicense(licenseName)}`;
 // ========================================================================================================
 
     // This writes the file using the string constructed above
