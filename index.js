@@ -1,6 +1,7 @@
 // Imports the "file system" and "inquirer" libraries
 const fs = require("fs");
 const inquirer = require("inquirer");
+const license = require("./assets/licenses/GNU-GPLv3-License");
 
 // Creates an array of questions to be used in the inquirer.prompt() method
 const questions = [
@@ -72,7 +73,7 @@ function hasInstall(installInstr) {
 function hasScreenshot(screenshotLink) {
 
     if (screenshotLink.trim() != "") {
-        return `\n![Demo Screenshot](${screenshotLink})`;
+        return `\n\n![Demo Screenshot](${screenshotLink})`;
     }
 
     return "";
@@ -81,10 +82,15 @@ function hasScreenshot(screenshotLink) {
 function hasThirdPartyAssets(thirdPartyAssets) {
 
     if (thirdPartyAssets.trim() != "") {
-        return "\n\nThird-Party Assets:\n" + thirdPartyAssets;
+        return "\n**Third-Party Assets:**\n" + thirdPartyAssets;
     }
 
     return "";
+}
+
+function tableOfContents(data) {
+
+
 }
 
 function writeToFile(data) {
@@ -97,7 +103,11 @@ function writeToFile(data) {
     /* This uses the data object to create a string of the contents of the file. For any
        information that may be left blank by the user, */
     readmeString = 
-`# ${projectName}${hasLinks(appLink, repoLink)}
+`# ${projectName}
+
+## Table of Contents
+
+${tableOfContents(data)}${hasLinks(appLink, repoLink)}
 ## Description
 
 ${projectDesc}${hasInstall(installInstr)}
@@ -108,7 +118,7 @@ ${usageInstr}${hasScreenshot(screenshotLink)}
 
 ## Credits
 
-Collaborators: ${collabNames}${hasThirdPartyAssets(thirdPartyAssets)}
+**Collaborators:** ${collabNames}${hasThirdPartyAssets(thirdPartyAssets)}
 
 ## License
 

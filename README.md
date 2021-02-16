@@ -1,25 +1,32 @@
 # README Generator
 
-## Repository Link
+## Table of Contents
 
+* [Repository Link](#repository%20link)
+* [Description](#description)
+* [Usage](#usage)
+* [Credits](#credits)
+* [License](#license)
+
+## Repository Link
 https://github.com/John-Paul-Grace/README-Generator
 
 ## Description
 
 This is a command-line application that takes user input and creates a professional README.md with that information.
 
-## User Story
+## Usage
 
-```
-AS A developer
-I WANT a README generator
-SO THAT I can quickly create a professional README for a new project
-```
+Run index.js using a local JavaScript runtime environment and answer the questions provided.
 
-## Screenshots
+![Demo Screenshot](assets/videos/demo.mp4)
 
-![Screenshot](Assets/Screenshot-1.PNG)
+## Credits
 
-## Contributions
+**Collaborators:** John Paul Grace
 
-Lorem Ipsum Dolor
+**Third-Party Assets:**
+Inquirer
+
+## License
+
